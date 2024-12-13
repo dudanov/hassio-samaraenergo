@@ -1,4 +1,4 @@
-"""Config flow for Erkc integration."""
+"""Config flow for SamaraEnergo integration."""
 
 import logging
 from typing import Any
@@ -34,8 +34,8 @@ def _calc_data_schema(schema: dict[str, list[str]]):
     )
 
 
-class ErkcConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Erkc."""
+class SamaraEnergoConfigFlow(ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for SamaraEnergo."""
 
     VERSION = 1
 
