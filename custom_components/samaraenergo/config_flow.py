@@ -5,7 +5,7 @@ from typing import Any
 
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
-from homeassistant.helpers.selector import selector
+from homeassistant.helpers.selector import SelectSelector
 from samaraenergo.calc import CalculatorConfig
 
 from .const import CONF_HEATING, CONF_POSITION, CONF_STOVE, CONF_TARIFF, DOMAIN
@@ -26,8 +26,8 @@ _CALC_CITY_SCHEMA = {
 def _calc_data_schema(schema: dict[str, list[str]]):
     return vol.Schema(
         {
-            vol.Required(k): selector(
-                {"select": {"options": v, "translation_key": "calc"}}
+            vol.Required(k): SelectSelector(
+                {"options": v, "mode": "dropdown", "translation_key": "calc"}
             )
             for k, v in schema.items()
         }
@@ -48,7 +48,7 @@ class ErkcConfigFlow(ConfigFlow, domain=DOMAIN):
 
         config = CalculatorConfig.from_config_str(self._config)
 
-        return self.async_create_entry(title=config.short_ru, data={})
+        return self.async_create_entry(title=f"Тарификатор {config.short_ru}", data={})
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
