@@ -12,48 +12,26 @@ from .const import CONF_HEATING, CONF_POSITION, CONF_STOVE, CONF_TARIFF, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
+_CALC_INIT_SCHEMA = {
+    CONF_POSITION: ["1", "2"],
+    CONF_TARIFF: ["7", "8", "9"],
+}
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_POSITION): selector(
-            {
-                "select": {
-                    "options": ["1", "2"],
-                    "translation_key": "calc_options",
-                }
-            }
-        ),
-        vol.Required(CONF_TARIFF): selector(
-            {
-                "select": {
-                    "options": ["7", "8", "9"],
-                    "translation_key": "calc_options",
-                }
-            }
-        ),
-    }
-)
+_CALC_CITY_SCHEMA = {
+    CONF_HEATING: ["3", "4"],
+    CONF_STOVE: ["5", "6"],
+}
 
-STEP_CITY_DATA_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_HEATING): selector(
-            {
-                "select": {
-                    "options": ["3", "4"],
-                    "translation_key": "calc_options",
-                }
-            }
-        ),
-        vol.Required(CONF_STOVE): selector(
-            {
-                "select": {
-                    "options": ["5", "6"],
-                    "translation_key": "calc_options",
-                }
-            }
-        ),
-    }
-)
+
+def _calc_data_schema(schema: dict[str, list[str]]):
+    return vol.Schema(
+        {
+            vol.Required(k): selector(
+                {"select": {"options": v, "translation_key": "calc"}}
+            )
+            for k, v in schema.items()
+        }
+    )
 
 
 class ErkcConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -93,7 +71,7 @@ class ErkcConfigFlow(ConfigFlow, domain=DOMAIN):
             return await self._create_calc_entry()
 
         return self.async_show_form(
-            step_id="calc_init", data_schema=STEP_USER_DATA_SCHEMA
+            step_id="calc_init", data_schema=_calc_data_schema(_CALC_INIT_SCHEMA)
         )
 
     async def async_step_calc_city(
@@ -106,5 +84,5 @@ class ErkcConfigFlow(ConfigFlow, domain=DOMAIN):
             return await self._create_calc_entry()
 
         return self.async_show_form(
-            step_id="calc_city", data_schema=STEP_CITY_DATA_SCHEMA
+            step_id="calc_city", data_schema=_calc_data_schema(_CALC_CITY_SCHEMA)
         )
