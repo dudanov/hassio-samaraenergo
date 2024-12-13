@@ -1,6 +1,6 @@
 {
   "domain": "samaraenergo",
-  "name": "Самара Энерго",
+  "name": "СамараЭнерго",
   "codeowners": ["@dudanov"],
   "config_flow": true,
   "documentation": "https://github.com/dudanov/hassio-samaraenergo",
