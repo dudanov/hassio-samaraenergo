@@ -419,27 +419,6 @@ tests = ["pytest (>=3.2.1,!=3.3.0)"]
 typecheck = ["mypy"]
 
 [[package]]
-name = "beautifulsoup4"
-version = "4.12.3"
-description = "Screen-scraping library"
-optional = false
-python-versions = ">=3.6.0"
-files = [
-    {file = "beautifulsoup4-4.12.3-py3-none-any.whl", hash = "sha256:b80878c9f40111313e55da8ba20bdba06d8fa3969fc68304167741bbf9e082ed"},
-    {file = "beautifulsoup4-4.12.3.tar.gz", hash = "sha256:74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051"},
-]
-
-[package.dependencies]
-soupsieve = ">1.2"
-
-[package.extras]
-cchardet = ["cchardet"]
-chardet = ["chardet"]
-charset-normalizer = ["charset-normalizer"]
-html5lib = ["html5lib"]
-lxml = ["lxml"]
-
-[[package]]
 name = "bleak"
 version = "0.22.3"
 description = "Bluetooth Low Energy platform Agnostic Klient"
@@ -572,17 +551,17 @@ docs = ["Sphinx (>=5.0,<6.0)", "myst-parser (>=0.18,<1.1)", "sphinx-rtd-theme (>
 
 [[package]]
 name = "boto3"
-version = "1.35.76"
+version = "1.35.80"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.35.76-py3-none-any.whl", hash = "sha256:69458399f41f57a50770c8974796d96978bcca44915c260319696bb43e47dffd"},
-    {file = "boto3-1.35.76.tar.gz", hash = "sha256:31ddcdb6f15dace2b68f6a0f11bdb58dd3ae79b8a3ccb174ff811ef0bbf938e0"},
+    {file = "boto3-1.35.80-py3-none-any.whl", hash = "sha256:21a3b18c3a7fd20e463708fe3fa035983105dc7f3a1c274e1903e1583ab91159"},
+    {file = "boto3-1.35.80.tar.gz", hash = "sha256:50dae461ab5fbedfb81b690895d48a918fed0d5fdff37be1c4232770c0dc9712"},
 ]
 
 [package.dependencies]
-botocore = ">=1.35.76,<1.36.0"
+botocore = ">=1.35.80,<1.36.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -591,13 +570,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.35.76"
+version = "1.35.80"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.35.76-py3-none-any.whl", hash = "sha256:b4729d12d00267b3185628f83543917b6caae292385230ab464067621aa086af"},
-    {file = "botocore-1.35.76.tar.gz", hash = "sha256:a75a42ae53395796b8300c5fefb2d65a8696dc40dc85e49cf3a769e0c0202b13"},
+    {file = "botocore-1.35.80-py3-none-any.whl", hash = "sha256:36e589dccb62380abd628b08fecfa2f7c89b99f41ec9fc42c467c94008c0be4a"},
+    {file = "botocore-1.35.80.tar.gz", hash = "sha256:b8dfceca58891cb2711bd6455ec4f7159051f3796e0f64adef9bb334f19d8a92"},
 ]
 
 [package.dependencies]
@@ -997,22 +976,6 @@ files = [
 cli = ["Jinja2[cli] (>=3.0.3,<4.0.0)", "click[cli] (>=8.0.3,<9.0.0)", "terminaltables[cli] (>=3.1.10,<4.0.0)"]
 
 [[package]]
-name = "erkc63"
-version = "0.2.18"
-description = ""
-optional = false
-python-versions = "<3.14,>=3.11"
-files = [
-    {file = "erkc63-0.2.18-py3-none-any.whl", hash = "sha256:a41c23c6cf8883546b66c44b9ba5f5a0ad555e2c1d9909ae454bcdad4eccefc9"},
-    {file = "erkc63-0.2.18.tar.gz", hash = "sha256:57c9d6dbfd34a437894b9014fd1f1225fa89a43aa216b5d386614f7d98b4f842"},
-]
-
-[package.dependencies]
-aiohttp = ">=3.10.0"
-beautifulsoup4 = ">=4.12.0"
-pypdf = {version = ">=4.2.0", extras = ["image"]}
-
-[[package]]
 name = "fnv-hash-fast"
 version = "1.0.2"
 description = "A fast version of fnv1a"
@@ -1330,13 +1293,13 @@ habluetooth = ">=3.0"
 
 [[package]]
 name = "homeassistant"
-version = "2024.12.1"
+version = "2024.12.3"
 description = "Open-source home automation platform running on Python 3."
 optional = false
 python-versions = ">=3.12.0"
 files = [
-    {file = "homeassistant-2024.12.1-py3-none-any.whl", hash = "sha256:7d926477dfb9b90c5d86376f9a74495cc73557f0ecbe73cc2345ed91e1268cbc"},
-    {file = "homeassistant-2024.12.1.tar.gz", hash = "sha256:a10e77b32cdd56377c1e23bcdd89680dccc35c3c1e658e26b80141e0747c4894"},
+    {file = "homeassistant-2024.12.3-py3-none-any.whl", hash = "sha256:144156e877a12cc9be869c0336b050311a7cd9a81f8b6e0971f75c61f1420d68"},
+    {file = "homeassistant-2024.12.3.tar.gz", hash = "sha256:560a1b9822b84484f352e2166ce7399b3cc8261e2f2e7991304cdf47c934bb2e"},
 ]
 
 [package.dependencies]
@@ -2343,28 +2306,6 @@ docs = ["sphinx (!=5.2.0,!=5.2.0.post0,!=7.2.5)", "sphinx-rtd-theme"]
 test = ["pretend", "pytest (>=3.0.1)", "pytest-rerunfailures"]
 
 [[package]]
-name = "pypdf"
-version = "5.1.0"
-description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pypdf-5.1.0-py3-none-any.whl", hash = "sha256:3bd4f503f4ebc58bae40d81e81a9176c400cbbac2ba2d877367595fb524dfdfc"},
-    {file = "pypdf-5.1.0.tar.gz", hash = "sha256:425a129abb1614183fd1aca6982f650b47f8026867c0ce7c4b9f281c443d2740"},
-]
-
-[package.dependencies]
-Pillow = {version = ">=8.0.0", optional = true, markers = "extra == \"image\""}
-
-[package.extras]
-crypto = ["cryptography"]
-cryptodome = ["PyCryptodome"]
-dev = ["black", "flit", "pip-tools", "pre-commit (<2.18.0)", "pytest-cov", "pytest-socket", "pytest-timeout", "pytest-xdist", "wheel"]
-docs = ["myst_parser", "sphinx", "sphinx_rtd_theme"]
-full = ["Pillow (>=8.0.0)", "cryptography"]
-image = ["Pillow (>=8.0.0)"]
-
-[[package]]
 name = "pyrfc3339"
 version = "2.0.1"
 description = "Generate and parse RFC 3339 timestamps"
@@ -2528,6 +2469,20 @@ botocore = ">=1.33.2,<2.0a.0"
 crt = ["botocore[crt] (>=1.33.2,<2.0a.0)"]
 
 [[package]]
+name = "samaraenergo"
+version = "0.1.0"
+description = "Клиент электросбытовой компании СамараЭнерго"
+optional = false
+python-versions = "<3.14,>=3.12"
+files = [
+    {file = "samaraenergo-0.1.0-py3-none-any.whl", hash = "sha256:c9fa1dc9a43c55d80ee2037b6f7afd9ba198472ee6a9bc5d65d9d85c0b7ae766"},
+    {file = "samaraenergo-0.1.0.tar.gz", hash = "sha256:0376bfb8d2892482d59d931bdcefb5107dc4682d7d3a5a46afdc4e6f1ee44410"},
+]
+
+[package.dependencies]
+aiohttp = ">=3.11"
+
+[[package]]
 name = "securetar"
 version = "2024.11.0"
 description = "Python module to handle tarfile backups."
@@ -2603,17 +2558,6 @@ cryptography = ">=2.5"
 [package.extras]
 lint = ["pylint (==3.1.0)", "ruff (==0.4.2)"]
 test = ["pytest (==8.2.0)", "pytest-aiohttp (==1.0.5)", "pytest-timeout (==2.3.1)"]
-
-[[package]]
-name = "soupsieve"
-version = "2.6"
-description = "A modern CSS selector implementation for Beautiful Soup."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "soupsieve-2.6-py3-none-any.whl", hash = "sha256:e72c4ff06e4fb6e4b5a9f0f55fe6e81514581fca1515028625d0f299c602ccc9"},
-    {file = "soupsieve-2.6.tar.gz", hash = "sha256:e2e68417777af359ec65daac1057404a3c8a5455bb8abc36f1a9866ab1a51abb"},
-]
 
 [[package]]
 name = "sqlalchemy"
@@ -3272,4 +3216,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<3.14"
-content-hash = "e499e80dc5eff920badd83494828c82b73a1e923fb4962e7438595757d29e223"
+content-hash = "fd3e63a3803244bca075e1dc4d868932432dc496e500a31b5cebbec70325d4a9"

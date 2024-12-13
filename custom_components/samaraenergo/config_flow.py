@@ -4,38 +4,53 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-from aiohttp import ClientError
-from erkc63 import AuthorizationError
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
-from homeassistant.helpers.selector import (
-    SelectOptionDict,
-    SelectSelector,
-    SelectSelectorConfig,
-    TextSelector,
-    TextSelectorConfig,
-    TextSelectorType,
-)
+from homeassistant.helpers.selector import selector
+from samaraenergo.calc import CalculatorConfig
 
-from .client import Client, ErkcConfigData
-from .const import CONF_ACCOUNTS, DOMAIN
+from .const import CONF_HEATING, CONF_POSITION, CONF_STOVE, CONF_TARIFF, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_EMAIL): TextSelector(
-            TextSelectorConfig(
-                type=TextSelectorType.EMAIL,
-                autocomplete="email",
-            ),
+        vol.Required(CONF_POSITION): selector(
+            {
+                "select": {
+                    "options": ["1", "2"],
+                    "translation_key": "calc_options",
+                }
+            }
         ),
-        vol.Required(CONF_PASSWORD): TextSelector(
-            TextSelectorConfig(
-                type=TextSelectorType.PASSWORD,
-                autocomplete="current-password",
-            ),
+        vol.Required(CONF_TARIFF): selector(
+            {
+                "select": {
+                    "options": ["7", "8", "9"],
+                    "translation_key": "calc_options",
+                }
+            }
+        ),
+    }
+)
+
+STEP_CITY_DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_HEATING): selector(
+            {
+                "select": {
+                    "options": ["3", "4"],
+                    "translation_key": "calc_options",
+                }
+            }
+        ),
+        vol.Required(CONF_STOVE): selector(
+            {
+                "select": {
+                    "options": ["5", "6"],
+                    "translation_key": "calc_options",
+                }
+            }
         ),
     }
 )
@@ -46,77 +61,50 @@ class ErkcConfigFlow(ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    _api: Client
-    """Клиент"""
-    _config: ErkcConfigData
+    _config: str
     """Данные записи конфигурации"""
-    _accounts: list[SelectOptionDict]
-    """Список доступных лицевых счетов"""
+
+    async def _create_calc_entry(self) -> ConfigFlowResult:
+        await self.async_set_unique_id(f"calc:{self._config}", raise_on_progress=False)
+        self._abort_if_unique_id_configured()
+
+        config = CalculatorConfig.from_config_str(self._config)
+
+        return self.async_create_entry(title=config.short_ru, data={})
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle the initial step."""
 
-        errors: dict[str, str] = {}
+        return await self.async_step_calc_init()
 
-        if user_input is not None:
-            email, password = user_input[CONF_EMAIL].lower(), user_input[CONF_PASSWORD]
-
-            await self.async_set_unique_id(email, raise_on_progress=False)
-            self._abort_if_unique_id_configured()
-
-            try:
-                self._api = Client(self.hass, email, password)
-                self._accounts = await self._api.get_accounts_options()
-
-            except AuthorizationError:
-                errors["base"] = "invalid_credentials"
-
-            except (ClientError, TimeoutError):
-                errors["base"] = "cannot_connect"
-
-            except Exception:
-                errors["base"] = "unknown"
-
-            else:
-                if not self._accounts:
-                    return self.async_abort(reason="no_accounts")
-
-                self._config = ErkcConfigData(
-                    email=email, password=password, accounts=[]
-                )
-
-                return await self.async_step_accounts()
-
-        return self.async_show_form(
-            step_id="user",
-            data_schema=STEP_USER_DATA_SCHEMA,
-            errors=errors,
-        )
-
-    async def async_step_accounts(
+    async def async_step_calc_init(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Handle the accounts step."""
+        """Handle the calc init options select step."""
 
         if user_input is not None:
-            # Сохраняем идентификаторы выбранных лицевых счетов как `list[int]`.
-            self._config[CONF_ACCOUNTS] = list(map(int, user_input[CONF_ACCOUNTS]))
-            # Заголовок записи конфигурации - адрес почты.
-            email = self._config[CONF_EMAIL]
+            self._config = f"{user_input[CONF_POSITION]}{user_input[CONF_TARIFF]}"
 
-            return self.async_create_entry(
-                title=email,
-                data=self._config,
-            )
+            if self._config.startswith("1"):
+                return await self.async_step_calc_city()
 
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_ACCOUNTS): SelectSelector(
-                    SelectSelectorConfig(options=self._accounts, multiple=True)
-                ),
-            }
+            return await self._create_calc_entry()
+
+        return self.async_show_form(
+            step_id="calc_init", data_schema=STEP_USER_DATA_SCHEMA
         )
 
-        return self.async_show_form(step_id=CONF_ACCOUNTS, data_schema=schema)
+    async def async_step_calc_city(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Handle the calc city options select step."""
+
+        if user_input is not None:
+            self._config += f"{user_input[CONF_HEATING]}{user_input[CONF_STOVE]}"
+            return await self._create_calc_entry()
+
+        return self.async_show_form(
+            step_id="calc_city", data_schema=STEP_CITY_DATA_SCHEMA
+        )

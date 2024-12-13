@@ -1,8 +1,7 @@
-"""The Erkc integration."""
+"""The SamaraEnergo integration."""
 
 import logging
 
-# from .coordinator import ErkcConfigEntry, ErkcCoordinator
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -18,8 +17,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ErkcConfigEntry) -> bool
     # await coordinator.async_config_entry_first_refresh()
     # entry.runtime_data = coordinator
 
-    _LOGGER.debug(f"Config: {entry.data}")
-    _LOGGER.debug(f"Config options: {entry.options}")
+    _LOGGER.debug(f"Unique ID: {entry.unique_id}")
 
     return True
 
