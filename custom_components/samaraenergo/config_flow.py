@@ -5,7 +5,11 @@ from typing import Any
 
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
-from homeassistant.helpers.selector import SelectSelector
+from homeassistant.helpers.selector import (
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+)
 from samaraenergo.calc import CalculatorConfig
 
 from .const import CONF_HEATING, CONF_POSITION, CONF_STOVE, CONF_TARIFF, DOMAIN
@@ -23,13 +27,17 @@ _CALC_CITY_SCHEMA = {
 }
 
 
-def _calc_data_schema(schema: dict[str, list[str]]):
+def _calc_schema(schema: dict[str, list[str]]):
     return vol.Schema(
         {
-            vol.Required(k): SelectSelector(
-                {"options": v, "mode": "dropdown", "translation_key": "calc"}
+            vol.Required(key): SelectSelector(
+                SelectSelectorConfig(
+                    options=options,
+                    mode=SelectSelectorMode.DROPDOWN,
+                    translation_key="calc_options",
+                )
             )
-            for k, v in schema.items()
+            for key, options in schema.items()
         }
     )
 
@@ -71,7 +79,7 @@ class SamaraEnergoConfigFlow(ConfigFlow, domain=DOMAIN):
             return await self._create_calc_entry()
 
         return self.async_show_form(
-            step_id="calc_init", data_schema=_calc_data_schema(_CALC_INIT_SCHEMA)
+            step_id="calc_init", data_schema=_calc_schema(_CALC_INIT_SCHEMA)
         )
 
     async def async_step_calc_city(
@@ -84,5 +92,5 @@ class SamaraEnergoConfigFlow(ConfigFlow, domain=DOMAIN):
             return await self._create_calc_entry()
 
         return self.async_show_form(
-            step_id="calc_city", data_schema=_calc_data_schema(_CALC_CITY_SCHEMA)
+            step_id="calc_city", data_schema=_calc_schema(_CALC_CITY_SCHEMA)
         )
