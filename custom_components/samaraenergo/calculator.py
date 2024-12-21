@@ -23,7 +23,7 @@ from homeassistant.util import dt as dt_util
 from homeassistant.util import slugify
 from samaraenergo.calc import OnlineCalculator
 
-from .const import CALC_PREFIX, DOMAIN, ENERGY_COST_UNIT
+from .const import CALC_PREFIX, DOMAIN, ENERGY_COST_UNIT, TIME_ZONE
 
 type CalculatorUpdateData = Mapping[str, float]
 
@@ -45,7 +45,7 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
     месяца для обновления.
 
     Координатор имеет встроенные механизмы обработки исключений запросов `aiohttp`,
-    поэтому их обработку в переопределенном методе `_async_update_data` не применяем.
+    поэтому их обработку в методе обновления не применяем.
     """
 
     entities_ids: list[str]
@@ -112,8 +112,7 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
 
         _LOGGER.debug("Обновление данных координатора")
 
-        # Часовой пояс Самарского региона (UTC+4)
-        tzinfo = await dt_util.async_get_time_zone("Europe/Samara")
+        tzinfo = await dt_util.async_get_time_zone(TIME_ZONE)
         data = await self.api.get_zones_cost(date=dt_util.now(tzinfo))
         data = {k: v for k, v in zip(self.entities_ids, data)}
 
@@ -124,8 +123,7 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
     async def _se_setup(self) -> None:
         """Метод получения обновленных данных"""
 
-        # Часовой пояс Самарского региона (UTC+4)
-        tzinfo = await dt_util.async_get_time_zone("Europe/Samara")
+        tzinfo = await dt_util.async_get_time_zone(TIME_ZONE)
         statistic_id = f"sensor.{self.entities_ids[0]}"
 
         last_stat = await get_instance(self.hass).async_add_executor_job(
