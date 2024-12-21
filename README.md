@@ -1,19 +1,19 @@
 ![SamaraEnergo Logo](images/logo@2x.png)
 
-[Home Assistant](https://www.home-assistant.io/) [HACS](https://hacs.xyz/) custom component for working with [SamaraEnergo](https://www.samaraenergo.ru/) energy sales company.
+Неофициальная [HACS](https://hacs.xyz/) интеграция [Home Assistant](https://www.home-assistant.io/) для работы с энергосбытовой компанией [СамараЭнерго](https://www.samaraenergo.ru/).
 
-At the moment, the integration provides current and statistical data on the cost of electricity.
+В настоящий момент интеграция предоставляет сенсоры с текущей стоимостью тарифов.
 
 ## Installation
 
 ### HACS
 
-Follow [this guide](https://hacs.xyz/docs/faq/custom_repositories/) to add this git repository as a custom HACS repository. Then install from HACS as normal.
+Следуйте [инструкции](https://hacs.xyz/docs/faq/custom_repositories/) как добавить этот репозиторий в HACS. Затем установите из HACS привычным способом.
 
-### Manual Installation
+### Ручная установка
 
-Copy `custom_components/samaraenergo` into your Home Assistant `$HA_HOME/config` directory, then restart Home Assistant.
+Скопируйте каталог `custom_components/samaraenergo` в конфигурационную директорию Home Assistant `$HA_HOME/config`, перезапустите Home Assistant.
 
-## Support
+## Поддержка
 
-If you find the component useful and want to support me and my work, you can do this by sending me a donation in [TONs](https://ton.org/): `UQCji6LsYAYrJP-Rij7SPjJcL0wkblVDmIkoWVpvP2YydnlA`.
+Поддержать меня и мою работу можно через [TONs](https://ton.org/): `UQCji6LsYAYrJP-Rij7SPjJcL0wkblVDmIkoWVpvP2YydnlA`.
