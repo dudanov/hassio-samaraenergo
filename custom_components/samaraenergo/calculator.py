@@ -114,7 +114,7 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
 
         tzinfo = await dt_util.async_get_time_zone(TIME_ZONE)
         data = await self.api.get_zones_cost(date=dt_util.now(tzinfo))
-        data = {k: v for k, v in zip(self.entities_ids, data)}
+        data = dict(zip(self.entities_ids, data))
 
         _LOGGER.debug("Обновленные данные координатора: %s", data)
 
