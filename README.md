@@ -1,5 +1,3 @@
-# SamaraEnergo
-
 ![SamaraEnergo Logo](images/logo@2x.png)
 
 [Home Assistant](https://www.home-assistant.io/) [HACS](https://hacs.xyz/) custom component for working with [SamaraEnergo](https://www.samaraenergo.ru/) energy sales company.
