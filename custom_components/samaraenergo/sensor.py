@@ -13,12 +13,14 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .calculator import CalculatorCoordinator
+from .const import ENERGY_COST_UNIT
 
 _LOGGER = logging.getLogger(__name__)
 
-_ZONE_COST = SensorEntityDescription(
+_ZONE_COST_SENSOR = SensorEntityDescription(
     icon="mdi:currency-rub",
     key="",
+    native_unit_of_measurement=ENERGY_COST_UNIT,
     state_class=SensorStateClass.TOTAL,
     translation_key="zone_cost",
 )
@@ -31,22 +33,24 @@ async def async_setup_entry(
 ) -> None:
     """Настройка платформы из записи конфигурации"""
 
-    coordinator: CalculatorCoordinator = entry.runtime_data
-    code = coordinator.api.config.code
+    coordinator = entry.runtime_data
 
-    entities = [
-        CalculatorSensorEntity(
-            coordinator,
-            dc.replace(
-                _ZONE_COST,
-                key=id,
-                translation_placeholders={"code": code, "num": str(num)},
-            ),
-        )
-        for num, id in enumerate(coordinator.entities_ids, 1)
-    ]
+    if isinstance(coordinator, CalculatorCoordinator):
+        tariff = coordinator.api.config.code
 
-    async_add_entities(entities)
+        entities = [
+            CalculatorSensorEntity(
+                coordinator,
+                dc.replace(
+                    _ZONE_COST_SENSOR,
+                    key=id,
+                    translation_placeholders={"tariff": tariff, "zone_id": str(num)},
+                ),
+            )
+            for num, id in enumerate(coordinator.entities_ids, 1)
+        ]
+
+        async_add_entities(entities)
 
 
 class CalculatorSensorEntity(CoordinatorEntity[CalculatorCoordinator], SensorEntity):

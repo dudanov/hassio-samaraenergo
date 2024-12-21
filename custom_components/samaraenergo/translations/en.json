@@ -58,8 +58,7 @@
   "entity": {
     "sensor": {
       "zone_cost": {
-        "name": "СамараЭнерго: тариф {code}, зона {num}",
-        "unit_of_measurement": "₽/кВт*ч"
+        "name": "СамараЭнерго: тариф {tariff}, зона {zone_id}"
       }
     }
   }

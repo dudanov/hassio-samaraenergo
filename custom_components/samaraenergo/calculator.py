@@ -23,7 +23,7 @@ from homeassistant.util import dt as dt_util
 from homeassistant.util import slugify
 from samaraenergo.calc import OnlineCalculator
 
-from .const import CALC_PREFIX, DOMAIN
+from .const import CALC_PREFIX, DOMAIN, ENERGY_COST_UNIT
 
 type CalculatorUpdateData = Mapping[str, float]
 
@@ -60,25 +60,25 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
             session=async_create_clientsession(hass),
         )
 
-        name = self.api.config.code
+        tariff = self.api.config.code
 
         super().__init__(
             hass,
             _LOGGER,
             config_entry=entry,
-            name=name,
-            update_method=self._se_update,
+            name=f"Координатор тарифа {tariff}",
             setup_method=self._se_setup,
+            update_method=self._se_update,
         )
 
-        # Вычисляем идентификаторы и имена сенсоров
+        # Вычисляем идентификаторы сенсоров
         self.entities_ids = []
-        prefix_id = f"{DOMAIN}_tariff_{slugify(name)}_zone_"
+        prefix_id = f"{DOMAIN}_tariff_{slugify(tariff)}_zone_"
 
         for n in range(1, self.api.zones + 1):
             self.entities_ids.append(f"{prefix_id}{n}")
 
-        _LOGGER.debug("Сенсоры тарификатора: %s", self.entities_ids)
+        _LOGGER.debug("Идентификаторы сенсоров: %s", self.entities_ids)
 
         # Вызываем метод обновления тарифа ежедневно в начале суток
         entry.async_on_unload(
@@ -91,7 +91,7 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
             )
         )
 
-        # Очистка статистики после выгрузки записи конфигурации
+        # Очистка статистики после выгрузки конфигурации
         def _clear_statistics():
             get_instance(hass).async_clear_statistics(
                 [f"sensor.{x}" for x in self.entities_ids]
@@ -174,7 +174,7 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
                 name=None,
                 source=RECORDER_DOMAIN,
                 statistic_id=f"sensor.{entity}",
-                unit_of_measurement=None,
+                unit_of_measurement=ENERGY_COST_UNIT,
             )
 
             values = [StatisticData(start=k, state=v, sum=v) for k, v in costs]

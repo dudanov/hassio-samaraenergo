@@ -1,4 +1,4 @@
-"""Constants for the SamaraEnergo integration."""
+"""Константы интеграции СамараЭнерго"""
 
 DOMAIN = "samaraenergo"
 
@@ -7,6 +7,7 @@ CONF_HEATING = "heating"
 CONF_POSITION = "position"
 CONF_STOVE = "stove"
 CONF_TARIFF = "tariff"
+ENERGY_COST_UNIT = "₽/кВт*ч"
 
 # Схемы опций селекторов конфигуратора калькулятора-тарификатора
 
