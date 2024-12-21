@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "hassio-samaraenergo"
+version = "0.1.0"
+description = ""
+authors = ["Sergey V. DUDANOV <sergey.dudanov@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [
+    { include = "samaraenergo", from = "custom_components" }
+]
+repository = "https://github.com/dudanov/hassio-samaraenergo"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.14"
+samaraenergo = ">=0.2.25"
+
+
+[tool.poetry.group.dev.dependencies]
+homeassistant = ">=2024.10"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,14 @@
+{
+  "domain": "samaraenergo",
+  "name": "СамараЭнерго",
+  "codeowners": ["@dudanov"],
+  "config_flow": true,
+  "dependencies": ["recorder"],
+  "documentation": "https://github.com/dudanov/hassio-samaraenergo",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/dudanov/hassio-samaraenergo/issues",
+  "loggers": ["samaraenergo"],
+  "requirements": ["samaraenergo==0.2.25"],
+  "version": "0.1.0"
+}
