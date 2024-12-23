@@ -11,7 +11,7 @@ CONF_HEATING = "heating"
 CONF_POSITION = "position"
 CONF_STOVE = "stove"
 CONF_TARIFF = "tariff"
-ENERGY_COST_UNIT = "₽/кВт*ч"
+ENERGY_COST_UNIT = "RUB/kWh"
 TIME_ZONE = "Europe/Samara"
 
 # Схемы опций селекторов конфигуратора калькулятора-тарификатора
