@@ -36,15 +36,13 @@ async def async_setup_entry(
     coordinator = entry.runtime_data
 
     if isinstance(coordinator, CalculatorCoordinator):
-        tariff = coordinator.api.config.code
-
         entities = [
             CalculatorSensorEntity(
                 coordinator,
                 dc.replace(
                     _ZONE_COST_SENSOR,
                     key=id,
-                    translation_placeholders={"tariff": tariff, "zone_id": str(num)},
+                    translation_placeholders={"zone_id": str(num)},
                 ),
             )
             for num, id in enumerate(coordinator.entities_ids, 1)
@@ -64,6 +62,7 @@ class CalculatorSensorEntity(CoordinatorEntity[CalculatorCoordinator], SensorEnt
         description: SensorEntityDescription,
     ) -> None:
         key = description.key
+        self._attr_device_info = coordinator.device_info
         self._attr_unique_id = key
         self.entity_description = description
         self.entity_id = f"sensor.{key}"

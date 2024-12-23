@@ -58,8 +58,13 @@
   "entity": {
     "sensor": {
       "zone_cost": {
-        "name": "СамараЭнерго: тариф {tariff}, зона {zone_id}"
+        "name": "Стоимость зоны {zone_id}"
       }
+    }
+  },
+  "device": {
+    "calculator": {
+      "name": "Калькулятор {tariff}"
     }
   }
 }

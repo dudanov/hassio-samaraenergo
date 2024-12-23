@@ -15,7 +15,8 @@ from homeassistant.components.recorder.statistics import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.recorder import get_instance
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -48,25 +49,38 @@ class CalculatorCoordinator(DataUpdateCoordinator[CalculatorUpdateData]):
     поэтому их обработку в методе обновления не применяем.
     """
 
+    config_entry: ConfigEntry[CalculatorCoordinator]
+    device_info: DeviceInfo
     entities_ids: list[str]
 
-    def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
+    def __init__(
+        self, hass: HomeAssistant, entry: ConfigEntry[CalculatorCoordinator]
+    ) -> None:
         """Initialize the data handler."""
 
         assert (unique_id := entry.unique_id)
 
         self.api = OnlineCalculator.from_string(
             config=unique_id.removeprefix(CALC_PREFIX),
-            session=async_create_clientsession(hass),
+            session=async_get_clientsession(hass),
         )
 
         tariff = self.api.config.code
+
+        self.device_info = DeviceInfo(
+            entry_type=DeviceEntryType.SERVICE,
+            identifiers={(DOMAIN, unique_id)},
+            manufacturer="СамараЭнерго",
+            model="Онлайн-калькулятор",
+            translation_key="calculator",
+            translation_placeholders={"tariff": tariff},
+        )
 
         super().__init__(
             hass,
             _LOGGER,
             config_entry=entry,
-            name=f"Координатор тарифа {tariff}",
+            name=f"Координатор калькулятора {tariff}",
             setup_method=self._se_setup,
             update_method=self._se_update,
         )
