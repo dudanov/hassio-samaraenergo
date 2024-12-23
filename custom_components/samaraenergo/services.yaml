@@ -1,4 +1,4 @@
-calculate:
+get_price:
   fields:
     config_entry:
       required: true
@@ -7,10 +7,10 @@ calculate:
           integration: samaraenergo
     consumptions:
       required: true
-      example: "230.1 или [102.3, 43.2]"
+      example: "[102.3, 43.2]"
       selector:
         object:
     date:
-      example: "2024-01-01"
+      example: "2024-12-01"
       selector:
         date:

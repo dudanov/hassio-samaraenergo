@@ -15,9 +15,9 @@ from .const import (
     ATTR_CONFIG_ENTRY,
     ATTR_CONSUMPTIONS,
     ATTR_DATE,
-    CALCULATE_SERVICE_NAME,
-    CALCULATE_SERVICE_SCHEMA,
     DOMAIN,
+    GET_PRICE_SERVICE_NAME,
+    GET_PRICE_SERVICE_SCHEMA,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ _LOGGER = logging.getLogger(__name__)
 def async_setup_services(hass: HomeAssistant) -> None:
     """Set up EnergyZero services."""
 
-    async def _get_zones_costs(call: ServiceCall) -> ServiceResponse:
+    async def _get_price_service(call: ServiceCall) -> ServiceResponse:
         entry = hass.config_entries.async_get_entry(call.data[ATTR_CONFIG_ENTRY])
         consumptions: list[float] = call.data[ATTR_CONSUMPTIONS]
         date = call.data.get(ATTR_DATE)
@@ -41,8 +41,11 @@ def async_setup_services(hass: HomeAssistant) -> None:
         try:
             price = await coordinator.api.request(*consumptions, date=date)
 
-        except ValueError as e:
-            raise ServiceValidationError(e)
+        except ValueError:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="calc_param_error",
+            )
 
         except ApiError as e:
             raise HomeAssistantError(e)
@@ -51,8 +54,8 @@ def async_setup_services(hass: HomeAssistant) -> None:
 
     hass.services.async_register(
         DOMAIN,
-        CALCULATE_SERVICE_NAME,
-        _get_zones_costs,
-        schema=CALCULATE_SERVICE_SCHEMA,
+        GET_PRICE_SERVICE_NAME,
+        _get_price_service,
+        schema=GET_PRICE_SERVICE_SCHEMA,
         supports_response=SupportsResponse.ONLY,
     )

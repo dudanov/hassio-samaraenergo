@@ -31,8 +31,8 @@ ATTR_CONFIG_ENTRY = "config_entry"
 ATTR_CONSUMPTIONS = "consumptions"
 ATTR_DATE = "date"
 
-CALCULATE_SERVICE_NAME = "calculate"
-CALCULATE_SERVICE_SCHEMA = vol.Schema(
+GET_PRICE_SERVICE_NAME = "get_price"
+GET_PRICE_SERVICE_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
             {
