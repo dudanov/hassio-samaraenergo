@@ -1,0 +1,16 @@
+get_price:
+  fields:
+    config_entry:
+      required: true
+      selector:
+        config_entry:
+          integration: samaraenergo
+    consumptions:
+      required: true
+      example: "[102.3, 43.2]"
+      selector:
+        object:
+    date:
+      example: "2024-12-01"
+      selector:
+        date:

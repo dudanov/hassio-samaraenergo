@@ -99,7 +99,7 @@ class SamaraEnergoConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             config = CalculatorConfig.from_string(self._config)
 
-            return self.async_create_entry(title=f"Тарификатор {config.code}", data={})
+            return self.async_create_entry(title=f"Калькулятор {config.code}", data={})
 
         unique_id = f"{CALC_PREFIX}{self._config}"
         await self.async_set_unique_id(unique_id, raise_on_progress=False)
