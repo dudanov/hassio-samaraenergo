@@ -18,7 +18,6 @@ from .const import ENERGY_COST_UNIT
 _LOGGER = logging.getLogger(__name__)
 
 _ZONE_COST_SENSOR = SensorEntityDescription(
-    icon="mdi:currency-rub",
     key="",
     native_unit_of_measurement=ENERGY_COST_UNIT,
     state_class=SensorStateClass.TOTAL,
