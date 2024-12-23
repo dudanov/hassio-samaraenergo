@@ -1,6 +1,5 @@
 import logging
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import (
     HomeAssistant,
     ServiceCall,
@@ -8,11 +7,18 @@ from homeassistant.core import (
     SupportsResponse,
     callback,
 )
-from homeassistant.exceptions import ServiceValidationError
-from homeassistant.util import dt as dt_util
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from samaraenergo.calc import ApiError
 
 from .calculator import CalculatorCoordinator
-from .const import CALCULATE_SERVICE_NAME, CALCULATE_SERVICE_SCHEMA, DOMAIN
+from .const import (
+    ATTR_CONFIG_ENTRY,
+    ATTR_CONSUMPTIONS,
+    ATTR_DATE,
+    CALCULATE_SERVICE_NAME,
+    CALCULATE_SERVICE_SCHEMA,
+    DOMAIN,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,23 +28,26 @@ def async_setup_services(hass: HomeAssistant) -> None:
     """Set up EnergyZero services."""
 
     async def _get_zones_costs(call: ServiceCall) -> ServiceResponse:
-        date = dt_util.parse_date(call.data["date"])
-        entry_id: str = call.data["config_entry"]
-        entry: ConfigEntry[CalculatorCoordinator] | None = (
-            hass.config_entries.async_get_entry(entry_id)
-        )
+        entry = hass.config_entries.async_get_entry(call.data[ATTR_CONFIG_ENTRY])
+        consumptions: list[float] = call.data[ATTR_CONSUMPTIONS]
+        date = call.data.get(ATTR_DATE)
 
-        if entry is None or date is None:
-            raise ServiceValidationError
-
+        assert entry
         coordinator = entry.runtime_data
 
         if not isinstance(coordinator, CalculatorCoordinator):
             raise ServiceValidationError("Поддерживаются только тарификаторы")
 
-        data = await coordinator.api.get_zones_cost(date=date)
+        try:
+            price = await coordinator.api.request(*consumptions, date=date)
 
-        return {f"zone_{idx}": v for idx, v in enumerate(data, 1)}
+        except ValueError as e:
+            raise ServiceValidationError(e)
+
+        except ApiError as e:
+            raise HomeAssistantError(e)
+
+        return {"price": price}
 
     hass.services.async_register(
         DOMAIN,

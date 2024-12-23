@@ -1,5 +1,6 @@
 """Константы интеграции СамараЭнерго"""
 
+import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.helpers import selector
 
@@ -26,14 +27,19 @@ CALC_CITY_SCHEMA = {
 }
 
 
+ATTR_CONFIG_ENTRY = "config_entry"
+ATTR_CONSUMPTIONS = "consumptions"
+ATTR_DATE = "date"
+
 CALCULATE_SERVICE_NAME = "calculate"
 CALCULATE_SERVICE_SCHEMA = vol.Schema(
     {
-        vol.Required("config_entry"): selector.ConfigEntrySelector(
+        vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
             {
                 "integration": DOMAIN,
             }
         ),
-        vol.Required("date"): str,
+        vol.Required(ATTR_CONSUMPTIONS): vol.All(cv.ensure_list, [cv.positive_float]),
+        vol.Optional(ATTR_DATE): cv.date,
     }
 )

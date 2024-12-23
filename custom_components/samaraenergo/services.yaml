@@ -1,14 +1,15 @@
 calculate:
-  target:
-    device:
-      integration: samaraenergo
-      model: "Онлайн-калькулятор"
   fields:
-    zones_consumption:
+    config_entry:
       required: true
-      example: "102.3,43.2"
       selector:
-        text:
+        config_entry:
+          integration: samaraenergo
+    consumptions:
+      required: true
+      example: "230.1 или [102.3, 43.2]"
+      selector:
+        object:
     date:
       example: "2024-01-01"
       selector:
